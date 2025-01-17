@@ -1,0 +1,32 @@
+services:
+
+  web:
+    image: nginx
+    volumes:
+     - ./templates:/usr/share/nginx/html
+    ports:
+      - "8000:80"
+
+  node-application:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: node-application
+    working_dir: /app
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=Total
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    ports:
+      - "3000:3000"
+    restart: always
+
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+     - 3306:3306
